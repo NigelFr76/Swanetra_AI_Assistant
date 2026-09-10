@@ -7,3 +7,5 @@ ultralytics
 Pillow
 requests
 pyaudio
+pytest
+python-dotenv
