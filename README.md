@@ -176,7 +176,3 @@ The current local token was also exposed during debugging and should be revoked 
 ## Contributing
 
 Keep local camera behavior working, add tests for pure logic, and avoid committing secrets or generated files.
-
-## License
-
-No license has been declared yet. Add a license before distributing the project publicly.

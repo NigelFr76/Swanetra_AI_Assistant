@@ -149,28 +149,39 @@ def speak(text, priority=False):
 def speech_worker():
     global engine
     native_say = shutil.which("say")
+
     try:
-        if native_say is None:
-            engine = pyttsx3.init()
         speech_engine_ready.set()
         log_event("TTS", "Ready")
     except Exception as error:
         log_event("TTS", f"ERROR: unavailable: {error}")
         return
+
     while running:
         try:
             text, done = speech_queue.get(timeout=0.5)
         except queue.Empty:
             continue
+
         try:
             log_event("TTS", f"Speaking: {text}")
+
             if native_say:
-                subprocess.run([native_say, "-v", "Samantha", text], check=True)
+                subprocess.run(
+                    [native_say, "-v", "Samantha", text],
+                    check=True
+                )
             else:
+                # Create a fresh Windows SAPI engine for each utterance
+                engine = pyttsx3.init()
                 engine.say(text)
                 engine.runAndWait()
+                engine.stop()
+                engine = None
+
         except Exception as error:
             log_event("TTS", f"ERROR: {error}")
+
         finally:
             done.set()
 
